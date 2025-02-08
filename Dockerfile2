@@ -1,0 +1,6 @@
+FROM maven:latest
+RUN mkdir /identity-service
+WORKDIR /identity-service
+COPY . .
+EXPOSE 8080
+CMD ["mvn", "springboot:run"]
