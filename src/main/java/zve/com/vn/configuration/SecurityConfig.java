@@ -27,6 +27,22 @@ public class SecurityConfig {
 	@Value("${jwt.signerkey}")
 	private String signerKey;
 	
+    private final String[] POST_PUBLIC_ENDPOINTS = {
+            "/users", 
+            "/auth/token", 
+            "/auth/introspect", 
+            "/auth/log-in", 
+            "/auth/logout", 
+            "/auth/refresh",
+    };
+	
+    private final String[] GET_PUBLIC_ENDPOINTS = {
+            "/home", 
+            "/", 
+            "/swagger-ui/**", 
+            "/actuator/**"
+    };
+    
 	@Autowired
 	JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	/* --------------------------------------------------------------------- */
@@ -34,13 +50,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeHttpRequests(
 				linhtinh -> linhtinh
-				.requestMatchers(HttpMethod.POST, "/users").permitAll()
-				.requestMatchers(HttpMethod.GET, "/users").permitAll()
-				.requestMatchers(HttpMethod.POST, "/auth/log-in", "/auth/introspect").permitAll()
-				.requestMatchers(HttpMethod.GET, "/home", "/", "/swagger-ui/**", "/actuator/**").permitAll()
-				//.requestMatchers(HttpMethod.GET, "/users").hasAuthority("ROLE_ADMIN") 		//.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_USER")
+				.requestMatchers(HttpMethod.POST, POST_PUBLIC_ENDPOINTS).permitAll()
+				.requestMatchers(HttpMethod.GET, GET_PUBLIC_ENDPOINTS).permitAll()
+				//.requestMatchers(HttpMethod.GET, "/users").hasAuthority("ROLE_ADMIN") 		
+				//.hasAnyAuthority("SCOPE_ADMIN", "SCOPE_USER")
 				//.requestMatchers(HttpMethod.GET, "/users").hasRole(Role.ADMIN.name()) 
 				.anyRequest().authenticated());
+				
 		
 		//Thực hiện decode token của request và tiến hành xác thực user
 		httpSecurity.oauth2ResourceServer(linhtinh -> 
@@ -48,8 +64,6 @@ public class SecurityConfig {
 					.jwtAuthenticationConverter(jwtAuthenticationConverter()))	
 					.authenticationEntryPoint(jwtAuthenticationEntryPoint)
 					);
-		
-		//Hủy chế độ csrf của app sau khi đã enable security
 		httpSecurity.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 		return httpSecurity.build();
     }
@@ -58,7 +72,7 @@ public class SecurityConfig {
 	@Bean
 	JwtAuthenticationConverter jwtAuthenticationConverter() {
 		JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-		jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+		jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
 		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
 		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
 		return jwtAuthenticationConverter;

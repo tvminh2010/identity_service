@@ -1,8 +1,11 @@
 package zve.com.vn.exception;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +33,7 @@ public class GlobalExceptionHandler {
 		 return buildErrorResponse(exception.getErrorCode());
 	}
 	/* --------------------------------------------------------------------- */
+	
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
 	public ResponseEntity<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException exception) {
 		
@@ -44,11 +48,19 @@ public class GlobalExceptionHandler {
 		return buildErrorResponse(errorCode);
 	}
 	/* --------------------------------------------------------------------- */
+	//@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Map<String, String>> methodArgumentNotValidExceptionHandler2(MethodArgumentNotValidException exception) {
+        Map<String, String> errors = new HashMap<>();
+        exception.getBindingResult().getFieldErrors().forEach(error ->
+            errors.put(error.getField(), error.getDefaultMessage()));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+	/* --------------------------------------------------------------------- */
 	@ExceptionHandler(value = AccessDeniedException.class)
 	public ResponseEntity<?> accessDeniedExceptionHandler (AccessDeniedException exception) {
 		return buildErrorResponse(ErrorCode.UN_AUTHORIRED);
 	}
-	/* --------------------------------------------------------------------- */
+    /* --------------------------------------------------------------------- */
     private ResponseEntity<ApiResponse<?>> buildErrorResponse(ErrorCode errorCode) {
         ApiResponse<?> apiResponse = new ApiResponse<>();
         apiResponse.setCode(errorCode.getCode());

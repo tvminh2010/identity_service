@@ -1,8 +1,8 @@
 package zve.com.vn.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.validation.Valid;
-import zve.com.vn.dto.request.PermissionCreationRequest;
+
+import zve.com.vn.dto.request.PermissionRequest;
 import zve.com.vn.dto.response.ApiResponse;
 import zve.com.vn.dto.response.PermissionResponse;
-import zve.com.vn.entity.Permission;
 import zve.com.vn.service.PermissionService;
 
 @RestController
@@ -28,39 +27,50 @@ public class PermissionController {
 	
 	/* ------------------------------------------------------------------ */
 	@PostMapping
-	public ApiResponse<PermissionResponse> createPermission(@RequestBody @Valid PermissionCreationRequest request) {
+	public ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest request) {
 		ApiResponse<PermissionResponse> apiResponse = new ApiResponse<PermissionResponse>();
 		apiResponse.setResult(permissionService.createPermission(request));
 		
 		return apiResponse;
 	}
 	/* ------------------------------------------------------------------ */
-	@GetMapping("")
-	public List<PermissionResponse> getPermissionses() {
-		return permissionService.getAllPermissions();
+	@GetMapping
+	public ApiResponse<List<PermissionResponse>> getPermissionses() {
+		ApiResponse<List<PermissionResponse>> apiResponse = new ApiResponse<List<PermissionResponse>>();
+		apiResponse.setResult(permissionService.getAllPermissions());
+		return apiResponse;
 	}
 	/* ------------------------------------------------------------------ */
 	
 	@GetMapping("/{permissionId}")
-	public PermissionResponse getPermissionById(@PathVariable("permissionId") String permissionId) {
-		return permissionService.getPermissionById(permissionId);
+	public ApiResponse<?> getPermissionById(@PathVariable("permissionId") String permissionId) {
+		ApiResponse<PermissionResponse> apiResponse = new ApiResponse<PermissionResponse>();
+		apiResponse.setResult(permissionService.getPermissionById(permissionId));
+		return apiResponse;
 	}
 	/* ------------------------------------------------------------------ */
 	@GetMapping("/search")
-	public ResponseEntity<?> searchPermission(@RequestParam(name = "keyword", required = false, defaultValue= "") String keyword) {
-		List<PermissionResponse> permissions = permissionService.searchPermissions(keyword);
-		return ResponseEntity.ok(permissions);
+	public ApiResponse<List<PermissionResponse>> searchPermission(@RequestParam(name = "keyword", required = false, defaultValue= "") String keyword) {
+		
+		ApiResponse<List<PermissionResponse>> apiResponse = new ApiResponse<List<PermissionResponse>>();
+		apiResponse.setResult(permissionService.searchPermissions(keyword));
+		//List<PermissionResponse> permissions = permissionService.searchPermissions(keyword);
+		//return ResponseEntity.ok(permissions);
+		return apiResponse;
 	}
 	/* ------------------------------------------------------------------ */
 	@PutMapping("/{permissionId}")
-	public Permission updatePermission (@PathVariable("permissionId") String permissionId,  @RequestBody PermissionCreationRequest req) {
-		return permissionService.updatePermission(permissionId, req);
+	public ApiResponse<PermissionResponse> updatePermission (@PathVariable("permissionId") String permissionId,  
+										@RequestBody PermissionRequest req) {
+		ApiResponse<PermissionResponse> apiResponse = new ApiResponse<PermissionResponse>();
+		apiResponse.setResult(permissionService.updatePermission(permissionId, req));
+		return apiResponse;
 	}
 	/* ------------------------------------------------------------------ */
 	@DeleteMapping("/{permissionId}")
 	public String deletePermissionById(@PathVariable("permissionId") String permissionId) {
 		permissionService.deletePermission(permissionId);
-		return "User with id: "+ permissionId + "have been deleted";
+		return "Permission: "+ permissionId + " have been deleted";
 	}
 	/* ------------------------------------------------------------------ */
 }

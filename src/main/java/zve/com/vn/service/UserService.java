@@ -1,7 +1,9 @@
 package zve.com.vn.service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -12,12 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import zve.com.vn.dto.mapper.UserMapper;
-import zve.com.vn.dto.request.UserCreationRequest;
+import zve.com.vn.dto.request.UserRequest;
 import zve.com.vn.dto.request.UserUpdateRequest;
 import zve.com.vn.dto.response.UserResponse;
+import zve.com.vn.entity.Role;
 import zve.com.vn.entity.User;
 import zve.com.vn.enums.ErrorCode;
 import zve.com.vn.exception.CustomAppException;
+import zve.com.vn.repository.RoleRepository;
 import zve.com.vn.repository.UserRepository;
 
 
@@ -34,51 +38,50 @@ public class UserService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private RoleRepository roleRepository;
+	
 	
 	/* ------------------------------------------------------------------ */
-	public UserResponse createUser(UserCreationRequest request) {
+	public UserResponse createUser(UserRequest request) {
 		if(userRepository.existsByUsername(request.getUsername())) {
 			throw new CustomAppException(ErrorCode.USER_EXISTED);
 		} 
 		
-		else if (userRepository.existsByEmail(request.getEmail())) {
+		if (userRepository.existsByEmail(request.getEmail())) {
 			throw new CustomAppException(ErrorCode.EMAIL_EXISTED);
 		}
 
 		User user = userMapper.toUser(request);
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
-		//user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt(12)));
-		//user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
 		
-		/*
-		HashSet<String> roles = new HashSet<>();
-		roles.add(Role.USER.name());
-		user.setRoles(roles);
-		*/
-		userRepository.save(user);
+		if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+			Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
+			user.setRoles(roles);
+		}
+	      
 		return userMapper.toUserResponse(userRepository.save(user));
 	}
 	/* ------------------------------------------------------------------ */
-	//@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasAuthority('APPROVE_POST')") /* Map chính xác với 1 trong các scope */
 	public List<UserResponse> getUsers() {
-		List<UserResponse> result =  new ArrayList<UserResponse>();
 		Sort sort = Sort.by(Sort.Direction.ASC, "username");
-		
-		for(User user: userRepository.findAll(sort)) {
-			result.add(userMapper.toUserResponse(user));
-		}
-		return result;
+        return userRepository.findAll(sort)
+                .stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
 	}
 	/* ------------------------------------------------------------------ */
 	public List<UserResponse> searchUser(String keyword) {
-		List<UserResponse> result = new ArrayList<>();
-
-		for (User user: userRepository.findAll()) {
-			if(user.getFirstName() != null && user.getFirstName().contains(keyword)) {
-				result.add(userMapper.toUserResponse(user));
-			}
-		}
-		return result;
+		Sort sort = Sort.by(Sort.Direction.ASC, "username");
+		return userRepository.findAll(sort)
+                .stream()
+                .filter(user -> user.getFirstName() != null && 
+                		user.getFirstName().contains(keyword))
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
 	}
 	/* ------------------------------------------------------------------ */
 	@PostAuthorize("returnObject.username == authentication.name")
@@ -86,11 +89,18 @@ public class UserService {
 		return userMapper.toUserResponse(userRepository.findById(id).orElseThrow(() -> new RuntimeException("User ko tồn tại")))  ;
 	}
 	/* ------------------------------------------------------------------ */
-	public User updateUser(String userId, UserUpdateRequest request) {
-		
-		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User ko tồn tại"));
-		return userRepository.save(user);
-		
+	public UserResponse updateUser(String userId, UserUpdateRequest request) {
+		User existingUser = userRepository
+				 	.findById(userId)
+	                .orElseThrow(() -> new CustomAppException(ErrorCode.USER_NOTFOUND));
+		 
+		userMapper.updateUser(existingUser, request);
+	
+		if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+			Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
+			existingUser.setRoles(roles);
+		}
+		return userMapper.toUserResponse(userRepository.save(existingUser));
 	}
 	/* ------------------------------------------------------------------ */
 	public void deleteUser(String userId) {
@@ -98,11 +108,10 @@ public class UserService {
 	}
 	/* ------------------------------------------------------------------ */
 	public UserResponse userInfo() {
-		var context = SecurityContextHolder.getContext();
-		String name = context.getAuthentication().getName();
-		User user = userRepository.findByUsername(name).orElseThrow(() -> new RuntimeException("User ko ton tai"));
-		UserResponse userResponse = userMapper.toUserResponse(user);
-		return userResponse;
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		 return userRepository.findByUsername(name)
+				 .map(userMapper::toUserResponse)
+				 .orElseThrow(() -> new RuntimeException("User không tồn tại"));
 	}
 	/* ------------------------------------------------------------------ */
 }

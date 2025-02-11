@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-import zve.com.vn.dto.request.UserCreationRequest;
+import zve.com.vn.dto.request.UserRequest;
 import zve.com.vn.dto.request.UserUpdateRequest;
 import zve.com.vn.dto.response.ApiResponse;
 import zve.com.vn.dto.response.UserResponse;
-import zve.com.vn.entity.User;
 import zve.com.vn.enums.ErrorCode;
 import zve.com.vn.service.UserService;
 
@@ -32,7 +31,7 @@ public class UserController {
 	
 	/* ------------------------------------------------------------------ */
 	@PostMapping
-	public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+	public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserRequest request) {
 		ApiResponse<UserResponse> apiResponse = new ApiResponse<UserResponse>();
 		apiResponse.setResult(userService.createUser(request));
 		apiResponse.setCode(ErrorCode.USER_CREATE_SUCCESS.getCode());
@@ -58,8 +57,10 @@ public class UserController {
 	}
 	/* ------------------------------------------------------------------ */
 	@PutMapping("/{userId}")
-	public User updateUser(@PathVariable("userId") String userId,  @RequestBody UserUpdateRequest req) {
-		return userService.updateUser(userId, req);
+	public ApiResponse<UserResponse> updateUser(@PathVariable("userId") String userId,  @RequestBody @Valid UserUpdateRequest req) {
+		ApiResponse<UserResponse> apiResponse = new ApiResponse<UserResponse>();
+		apiResponse.setResult(userService.updateUser(userId, req));
+		return apiResponse;
 	}
 	/* ------------------------------------------------------------------ */
 	@DeleteMapping("/{userId}")
@@ -68,7 +69,7 @@ public class UserController {
 		return "User with id: "+userId+ "have been deleted";
 	}
 	/* ------------------------------------------------------------------ */
-	@GetMapping("/userInfo")
+	@GetMapping("/info")
 	public ApiResponse<UserResponse> userInfo() {
 		ApiResponse<UserResponse> apiResponse = new ApiResponse<UserResponse>();
 		apiResponse.setResult(userService.userInfo());

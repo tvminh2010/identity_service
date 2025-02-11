@@ -1,4 +1,6 @@
-package zve.com.vn.dto.request;
+package zve.com.vn.dto.response;
+
+import java.util.Set;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +14,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PermissionCreationRequest {
-	String name;						
-	String description;	
+public class RoleResponse {
+	String name;
+	String description;
+	Set<PermissionResponse> permissions;
 }

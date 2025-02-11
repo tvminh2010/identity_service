@@ -1,4 +1,4 @@
-package zve.com.vn.dto.response;
+package zve.com.vn.dto.request;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PermissionResponse {
-	String name;
-	String description;
+public class PermissionRequest {
+	String name;						
+	String description;	
 }

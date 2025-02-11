@@ -10,11 +10,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -23,6 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class User implements Serializable {
 	
 	/**
@@ -31,16 +34,20 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.UUID)
-	private String id;								//Đổi sang Integer nếu là sql server
-	private String username;
-	private String password;
-	private String email;
+	String id;								//Đổi sang Integer nếu là sql server
+	
+	String username;
+	String password;
+	String email;
+	
 	@Column(columnDefinition = "nvarchar(255)")		//Nếu dùng database là sqlserver
-	private String firstName;
+	String firstName;
+	
 	@Column(columnDefinition = "nvarchar(255)")		//Nếu dùng database là sqlserver
-	private String lastName;
-	private LocalDate dob;
+	String lastName;
+	LocalDate dob;
 	
 	@ManyToMany
-	private Set<Role> roles;
+	Set<Role> roles;
+	
 }

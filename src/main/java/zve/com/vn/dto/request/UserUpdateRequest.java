@@ -1,29 +1,29 @@
 package zve.com.vn.dto.request;
 
 import java.time.LocalDate;
-
-import org.springframework.stereotype.Component;
+import java.util.List;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-@Data
-@Component
+@Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
 
-	@Size(min=3, message="username phải ít nhất 3 ký tự")
-	private String username;
 	
-	@Email(message="Không đúng định dạng email")
+	@Email(message="INVALID_EMAIL")
 	private String email;
 	
-	@Size(min=8, message = "Mật khẩu phải đủ 8 ký tự")
+	@Size(min=8, message = "INVALID_PASSWORD")
 	String password;
+	
 	String firstName;
 	String lastName;
 	LocalDate dob;
+	List<String> roles;
 }

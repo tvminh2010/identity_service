@@ -3,8 +3,12 @@ package zve.com.vn.service;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,7 @@ import zve.com.vn.dto.request.AuthenticationRequest;
 import zve.com.vn.dto.request.IntrospectRequest;
 import zve.com.vn.dto.response.AuthenticationRestponse;
 import zve.com.vn.dto.response.IntrospectRestponse;
+import zve.com.vn.entity.Permission;
 import zve.com.vn.entity.User;
 import zve.com.vn.enums.ErrorCode;
 import zve.com.vn.exception.CustomAppException;
@@ -55,7 +60,7 @@ public class AuthenticationService {
 	
 	public AuthenticationRestponse authenticateJwt(AuthenticationRequest request) {
 		var user =  userRepository.findByUsername(request.getUsername())
-				.orElseThrow(() -> new CustomAppException (ErrorCode.UN_AUTHENTICATED));
+				.orElseThrow(() -> new CustomAppException (ErrorCode.USER_NOT_EXISTED));
 		boolean authenticated = BCrypt.checkpw(request.getPassword(), user.getPassword());
 		
 		AuthenticationRestponse authenticationResponse = new AuthenticationRestponse();
@@ -72,13 +77,14 @@ public class AuthenticationService {
 	private String generateToken(User user) {
 		JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);									//Tạo đối tượng JWSHeader
 		
-		//Tạo đối tượng JWTClaimsSet, là payload của token
 		JWTClaimsSet jwtClaimSet = new JWTClaimsSet.Builder()
 				.subject(user.getUsername())														//Xác định tiêu đề của token là username đăng nhập
 				.issuer("trinhvanminh.net")															//Người cấp token, thường là domain của mình
 				.issueTime(new Date())																//Thời gian cấp, lấy thời gian hiện tại
-				.expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))	//Thời gian hết hạn tocken sau 1h
-				.claim("scope", buidScope(user))
+				.expirationTime(new Date(Instant.now()
+				.plus(1, ChronoUnit.HOURS)
+				.toEpochMilli()))																	//Thời gian hết hạn tocken sau 1h
+				.claim("scope", getUserRolesAndPermissions(user))
 				.build();		
 		Payload payload = new Payload(jwtClaimSet.toJSONObject());
 		
@@ -106,13 +112,29 @@ public class AuthenticationService {
 			.build();
 	}
 	/* -------------------------------------------------------- */
+	/*
 	private String buidScope(User user) {
-		StringJoiner stringJoiner = new StringJoiner("");
-		
-		//if (!CollectionUtils.isEmpty(user.getRoles())) {
-			//user.getRoles().forEach(s -> stringJoiner.add(s));}
-		
+		StringJoiner stringJoiner = new StringJoiner(" ");
+		if(!CollectionUtils.isEmpty(user.getRoles())) {
+			user.getRoles().forEach(role -> {
+				stringJoiner.add(role.getName());
+				if(!CollectionUtils.isEmpty(role.getPermissions())) {
+					role.getPermissions().forEach(permission -> {stringJoiner.add(permission.getName()); });
+				}
+			});
+		}
 		return stringJoiner.toString();
+	} */
+	/* -------------------------------------------------------- */
+	private String getUserRolesAndPermissions(User user) {
+	    return Optional.ofNullable(user.getRoles())		//Tránh lỗi NullPointerException 
+	            .orElse(Collections.emptySet())			//nếu user.getRoles() là null trả về tập rỗng
+	            .stream()  								//Duyệt qua từng role và lấy tên
+	            .flatMap(
+	               role -> Stream.concat(Stream.of("ROLE_" + role.getName()),		// Tạo một Stream chỉ chứa tên Role
+                   Optional.ofNullable(role.getPermissions()).orElse(Collections.emptySet()).stream().map(Permission::getName)))
+	            .collect(Collectors.joining(" ")); 
 	}
+	
 	/* -------------------------------------------------------- */
 }

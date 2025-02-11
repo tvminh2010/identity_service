@@ -14,11 +14,15 @@ public enum ErrorCode {
 	INVALID_USERNAME	(1006, "Username phải ít nhất 3 ký tự", HttpStatus.BAD_REQUEST),
 	INVALID_EMAIL 		(1007, "Email không đúng định dạng", HttpStatus.BAD_REQUEST),
 	INVALID_PASSWORD 	(1008, "Mật khẩu phải đủ 8 ký tự", HttpStatus.BAD_REQUEST),
+	INVALID_DOB 		(1008, "Invalid date of birth", HttpStatus.BAD_REQUEST),
 	INVALID_KEY 		(1009, "Invalid Key", HttpStatus.BAD_REQUEST),
 	/* Authentication */
-	USER_NOT_EXISTED 	(1010, "User không tồn tại", HttpStatus.NOT_FOUND),
-	UN_AUTHENTICATED 	(1011, "User cannot authenticated", HttpStatus.UNAUTHORIZED),
-	UN_AUTHORIRED	 	(1012, "You do not have permissiont to access", HttpStatus.FORBIDDEN),
+	USER_NOT_EXISTED 	(1010, "User not existed", HttpStatus.NOT_FOUND),
+	PERMISSION_NOTFOUND (1011, "Permission not found!", HttpStatus.NOT_FOUND),
+	ROLE_NOTFOUND 		(1012, "Role not found!", HttpStatus.NOT_FOUND),
+	USER_NOTFOUND 		(1013, "Role not found!", HttpStatus.NOT_FOUND),
+	UN_AUTHENTICATED 	(1014, "User cannot authenticated", HttpStatus.UNAUTHORIZED),
+	UN_AUTHORIRED	 	(1015, "You do not have permission to access", HttpStatus.FORBIDDEN),
 	UN_CATEGORIZE_EXCEPTION (9999, "Uncategorize Exception", HttpStatus.INTERNAL_SERVER_ERROR),
 	;
 
