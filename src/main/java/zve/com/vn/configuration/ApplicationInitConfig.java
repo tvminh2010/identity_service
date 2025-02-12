@@ -1,6 +1,5 @@
 package zve.com.vn.configuration;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.extern.slf4j.Slf4j;
+import zve.com.vn.entity.Role;
 import zve.com.vn.entity.User;
-import zve.com.vn.enums.Role;
 import zve.com.vn.repository.UserRepository;
 
 @Configuration
@@ -42,14 +41,17 @@ public class ApplicationInitConfig {
 		System.out.println("*******************************************");
 		return args -> {
 			if (userRepository.findByUsername("admin").isEmpty()) {
-				Set<String> roles = new HashSet<String>();
-				roles.add(Role.ADMIN.name());
+
+				Role role = new Role();
+				role.setName("ADMIN");
+
+				Set<Role> roles = Set.of(role); // Sử dụng Set.of() thay vì HashSet
 				
 				User user = User.builder()
 					.username("admin")
 					.firstName("Administrator")
 					.password(passwordEncoder.encode(defaultAdminPassword))
-					//.roles(roles)
+					.roles(roles)
 					.build();
 				
 				userRepository.save(user);
