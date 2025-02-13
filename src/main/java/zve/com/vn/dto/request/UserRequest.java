@@ -28,7 +28,7 @@ public class UserRequest {
 	String password;
 	String firstName;
 	String lastName;
-	@DobConstraint(min=10, max=65, message = "INVALID_DOB")
+	@DobConstraint(min=10, max=60, message = "INVALID_DOB")
 	LocalDate dob;
 	List<String> roles;
 }
