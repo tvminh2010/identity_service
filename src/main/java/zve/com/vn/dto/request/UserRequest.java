@@ -21,16 +21,14 @@ public class UserRequest {
 	@Email(message="INVALID_EMAIL")
 	private String email;
 	
-	@Size(min=3, message="INVALID_USERNAME")
+	@Size(min=4, max=24, message="INVALID_USERNAME")
 	String username;
 	
 	@Size(min=8, message = "INVALID_PASSWORD")
 	String password;
 	String firstName;
 	String lastName;
-	
-	@DobConstraint(min=18, message = "INVALID_DOB")
+	@DobConstraint(min=10, max=65, message = "INVALID_DOB")
 	LocalDate dob;
-	
 	List<String> roles;
 }

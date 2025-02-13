@@ -12,9 +12,11 @@ import jakarta.validation.Payload;
 @Constraint(validatedBy = {DobValidator.class})
 public @interface DobConstraint {
 
-	int min();
+	int min() default 18;
+	int max() default 65;
 	
-	String message() default "Invalid date of birth!";
+	
+	String message() default "Date of birth must be between {min} and {max} years old!";
 	Class<?>[] groups() default { };
 	Class<? extends Payload>[] payload() default { };
 }

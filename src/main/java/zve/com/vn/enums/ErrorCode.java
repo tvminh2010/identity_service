@@ -2,6 +2,7 @@ package zve.com.vn.enums;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+
 import lombok.Getter;
 
 @Getter
@@ -11,10 +12,11 @@ public enum ErrorCode {
 	USER_DELETE_SUCCESS (1003, "Xóa thành công user", HttpStatus.ALREADY_REPORTED),
 	USER_EXISTED 		(1004, "User đã tồn tại", HttpStatus.BAD_REQUEST),
 	EMAIL_EXISTED 		(1005, "Email đã tồn tại", HttpStatus.BAD_REQUEST),
-	INVALID_USERNAME	(1006, "Username phải ít nhất 3 ký tự", HttpStatus.BAD_REQUEST),
+	INVALID_USERNAME	(1006, "Username >= {min} và <= {max} ký tự", HttpStatus.BAD_REQUEST),
 	INVALID_EMAIL 		(1007, "Email không đúng định dạng", HttpStatus.BAD_REQUEST),
-	INVALID_PASSWORD 	(1008, "Mật khẩu phải đủ 8 ký tự", HttpStatus.BAD_REQUEST),
-	INVALID_DOB 		(1008, "Invalid date of birth", HttpStatus.BAD_REQUEST),
+	INVALID_PASSWORD 	(1008, "Mật khẩu phải đủ {min} ký tự", HttpStatus.BAD_REQUEST),
+	INVALID_DOB1 		(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
+	INVALID_DOB 		(1008, "Your ages must be >= {min} and <= {max} years old!", HttpStatus.BAD_REQUEST),
 	INVALID_KEY 		(1009, "Invalid Key", HttpStatus.BAD_REQUEST),
 	/* Authentication */
 	USER_NOT_EXISTED 	(1010, "User not existed", HttpStatus.NOT_FOUND),

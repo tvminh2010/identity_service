@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import zve.com.vn.validator.DobConstraint;
 
 @Getter
 @Setter
@@ -17,13 +18,12 @@ public class UserUpdateRequest {
 
 	
 	@Email(message="INVALID_EMAIL")
-	private String email;
-	
+	private String email;	
 	@Size(min=8, message = "INVALID_PASSWORD")
 	String password;
-	
 	String firstName;
 	String lastName;
+	@DobConstraint(min=16, max=65, message = "INVALID_DOB")
 	LocalDate dob;
 	List<String> roles;
 }
