@@ -40,8 +40,8 @@ public class AuthenticationController {
 	}
 	/* ------------------------------------------------------------------------------- */
 	@PostMapping("/introspect")
-	ApiResponse<IntrospectRestponse> introspect(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
-		var result = authenticationService.introspect(request);
+	ApiResponse<IntrospectRestponse> validate(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
+		var result = authenticationService.validate(request);
 		
 		ApiResponse<IntrospectRestponse> apiResponse = new ApiResponse<IntrospectRestponse>();
 		apiResponse.setResult(result);
@@ -49,8 +49,8 @@ public class AuthenticationController {
 	}
 	/* ------------------------------------------------------------------------------- */
 	@PostMapping("/validatetoken")
-	ApiResponse<IntrospectRestponse> introspect2(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
-		var result = authenticationService.introspect2(request);
+	ApiResponse<IntrospectRestponse> validate2(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
+		var result = authenticationService.validate2(request);
 		ApiResponse<IntrospectRestponse> apiResponse = new ApiResponse<IntrospectRestponse>();
 		apiResponse.setResult(result);
 		return apiResponse;

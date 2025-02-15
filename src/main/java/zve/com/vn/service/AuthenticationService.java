@@ -69,7 +69,7 @@ public class AuthenticationService {
 		return new AuthenticationRestponse(authenticated, generateToken(user));
 	}
 	/* -------------------------------------------------------- */
-	public IntrospectRestponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+	public IntrospectRestponse validate(IntrospectRequest request) throws JOSEException, ParseException {
 	    try {
 	        verifyToken(request.getToken());
 	        return IntrospectRestponse.builder()
@@ -83,7 +83,7 @@ public class AuthenticationService {
 	    }
 	}
 	/* -------------------------------------------------------- */
-	public IntrospectRestponse introspect2(IntrospectRequest request) throws JOSEException, ParseException {
+	public IntrospectRestponse validate2(IntrospectRequest request) throws JOSEException, ParseException {
 	    verifyToken(request.getToken());
 	    return IntrospectRestponse.builder().valid(true).build();
 	}
@@ -123,6 +123,7 @@ public class AuthenticationService {
 		return signedJWT;
 	}
 	/* -------------------------------------------------------- */
+	//Kiểm tra xem token có được lưu vào CSDL sau khi logout ko?
 	 public boolean isTokenBlacklisted(String jwtId) {
 		 return invalidateRepository.existsById(jwtId);
 	 }
