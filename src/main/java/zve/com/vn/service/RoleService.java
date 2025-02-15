@@ -61,7 +61,7 @@ public class RoleService {
 	public void deleteRole(String roleId) {
 		Optional<Role> optRole = roleRepository.findById(roleId);
 		if(!optRole.isPresent()) {
-			throw new CustomAppException(ErrorCode.ROLE_NOTFOUND);
+			throw new CustomAppException(ErrorCode.ROLE_NOT_FOUND);
 		} else {
 			roleRepository.deleteById(roleId);
 		}
@@ -70,7 +70,7 @@ public class RoleService {
 	public RoleResponse updateRole (String roleId, RoleRequest request) {
 		Optional<Role> optRole = roleRepository.findById(roleId);
 		if(!optRole.isPresent()) {
-			throw new CustomAppException(ErrorCode.ROLE_NOTFOUND);
+			throw new CustomAppException(ErrorCode.ROLE_NOT_FOUND);
 		} else {
 			Role role = roleMapper.toRole(request);
 			List<Permission> permissions = permissionRepository.findAllById(request.getPermissions());

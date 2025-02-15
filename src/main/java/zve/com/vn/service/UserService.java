@@ -86,16 +86,23 @@ public class UserService {
 	/* ------------------------------------------------------------------ */
 	@PostAuthorize("returnObject.username == authentication.name")
 	public UserResponse getUserById(String id) {
-		return userMapper.toUserResponse(userRepository.findById(id).orElseThrow(() -> new RuntimeException("User ko tồn tại")))  ;
+		return userMapper.toUserResponse(
+				userRepository
+				.findById(id)
+				.orElseThrow(() -> new CustomAppException(ErrorCode.USER_NOT_FOUND))
+		);
 	}
 	/* ------------------------------------------------------------------ */
 	public UserResponse updateUser(String userId, UserUpdateRequest request) {
 		User existingUser = userRepository
 				 	.findById(userId)
-	                .orElseThrow(() -> new CustomAppException(ErrorCode.USER_NOTFOUND));
+	                .orElseThrow(() -> new CustomAppException(ErrorCode.USER_NOT_FOUND));
 		 
 		userMapper.updateUser(existingUser, request);
-	
+		
+		if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+			existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
+		}
 		if (request.getRoles() != null && !request.getRoles().isEmpty()) {
 			Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
 			existingUser.setRoles(roles);
@@ -104,6 +111,9 @@ public class UserService {
 	}
 	/* ------------------------------------------------------------------ */
 	public void deleteUser(String userId) {
+		if (!userRepository.existsById(userId)) {
+			 throw new CustomAppException(ErrorCode.USER_NOT_FOUND);
+		}
 		userRepository.deleteById(userId);
 	}
 	/* ------------------------------------------------------------------ */

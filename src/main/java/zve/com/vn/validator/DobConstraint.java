@@ -13,7 +13,7 @@ import jakarta.validation.Payload;
 public @interface DobConstraint {
 
 	int min() default 18;
-	int max() default 65;
+	//int max() default 100;
 	
 	
 	String message() default "Date of birth must be between {min} and {max} years old!";

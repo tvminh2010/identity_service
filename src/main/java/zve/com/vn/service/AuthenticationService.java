@@ -6,15 +6,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -31,12 +31,15 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import zve.com.vn.dto.request.AuthenticationRequest;
 import zve.com.vn.dto.request.IntrospectRequest;
+import zve.com.vn.dto.request.LogoutRequest;
 import zve.com.vn.dto.response.AuthenticationRestponse;
 import zve.com.vn.dto.response.IntrospectRestponse;
+import zve.com.vn.entity.InvalidateToken;
 import zve.com.vn.entity.Permission;
 import zve.com.vn.entity.User;
 import zve.com.vn.enums.ErrorCode;
 import zve.com.vn.exception.CustomAppException;
+import zve.com.vn.repository.InvalidateRepository;
 import zve.com.vn.repository.UserRepository;
 
 @Service
@@ -46,44 +49,92 @@ public class AuthenticationService {
 	@Autowired
 	UserRepository userRepository;
 	
+	@Autowired
+	InvalidateRepository invalidateRepository;
+	
 	@NonFinal	//Ko cho phép inject vào constructor
 	@Value("${jwt.signerkey}")
 	protected /* static final*/String SIGNER_KEY; //= "YvAD7YK1Xx+EitDRWO6lwao4SMtLuFaQamhBNXniy7c3PAbgpXo0BgVDBakWnABZ";
 
 	/* -------------------------------------------------------- */
-	public boolean authenticate(AuthenticationRequest request)  {
-		var user =  userRepository.findByUsername(request.getUsername())
-				.orElseThrow(() -> new CustomAppException (ErrorCode.USER_NOT_EXISTED));
-		return BCrypt.checkpw(request.getPassword(), user.getPassword());
-	}
-	/* -------------------------------------------------------- */
-	
 	public AuthenticationRestponse authenticateJwt(AuthenticationRequest request) {
 		var user =  userRepository.findByUsername(request.getUsername())
 				.orElseThrow(() -> new CustomAppException (ErrorCode.USER_NOT_EXISTED));
 		boolean authenticated = BCrypt.checkpw(request.getPassword(), user.getPassword());
 		
-		AuthenticationRestponse authenticationResponse = new AuthenticationRestponse();
-		authenticationResponse.setAuthenticated(authenticated);
+		
 		if(!authenticated) {
 			throw new CustomAppException(ErrorCode.UN_AUTHENTICATED);
 		}
-		var token = generateToken(user);
-		authenticationResponse.setToken(token);
-		
-		return authenticationResponse;
+		return new AuthenticationRestponse(authenticated, generateToken(user));
 	}
+	/* -------------------------------------------------------- */
+	public IntrospectRestponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+	    try {
+	        verifyToken(request.getToken());
+	        return IntrospectRestponse.builder()
+	                .valid(true).build();
+	    } catch (CustomAppException e) {
+	        return IntrospectRestponse.builder()
+	                .valid(false).build();
+	    } catch (Exception e) {
+	        return IntrospectRestponse.builder()
+	                .valid(false).build();
+	    }
+	}
+	/* -------------------------------------------------------- */
+	public IntrospectRestponse introspect2(IntrospectRequest request) throws JOSEException, ParseException {
+	    verifyToken(request.getToken());
+	    return IntrospectRestponse.builder().valid(true).build();
+	}
+	/* -------------------------------------------------------- */
+	public void logout (LogoutRequest request) throws JOSEException, ParseException {
+		var signedToken = verifyToken(request.getToken());
+		String jit 			= signedToken.getJWTClaimsSet().getJWTID();
+		Date expiredDate	= signedToken.getJWTClaimsSet().getExpirationTime();
+		
+		 if (isTokenBlacklisted(jit)) {
+		        throw new CustomAppException(ErrorCode.TOKEN_LOGGED_OUT);
+		 }
+		
+		 invalidateRepository.save(new InvalidateToken(jit, expiredDate));
+	     SecurityContextHolder.clearContext();
+	}
+	/* -------------------------------------------------------- */
+	public SignedJWT verifyToken(String token) throws JOSEException, ParseException {
+		JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+		SignedJWT signedJWT = SignedJWT.parse(token);
+		boolean verified = signedJWT.verify(verifier);
+		
+		 if (!verified) {
+		        throw new CustomAppException(ErrorCode.INVALID_TOKEN);
+	    }
+		Date expirationTime  =  signedJWT.getJWTClaimsSet().getExpirationTime();
+		
+		
+	    if (expirationTime == null || expirationTime.before(new Date())) {
+	        throw new CustomAppException(ErrorCode.TOKEN_EXPIRE);
+	    }   
+	    
+	    if(isTokenBlacklisted(signedJWT.getJWTClaimsSet().getJWTID())) {
+	    	 throw new CustomAppException(ErrorCode.TOKEN_LOGGED_OUT);
+	    }
+	    
+		return signedJWT;
+	}
+	/* -------------------------------------------------------- */
+	 public boolean isTokenBlacklisted(String jwtId) {
+		 return invalidateRepository.existsById(jwtId);
+	 }
 	/* -------------------------------------------------------- */
 	private String generateToken(User user) {
 		JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);									//Tạo đối tượng JWSHeader
-		
 		JWTClaimsSet jwtClaimSet = new JWTClaimsSet.Builder()
 				.subject(user.getUsername())														//Xác định tiêu đề của token là username đăng nhập
 				.issuer("trinhvanminh.net")															//Người cấp token, thường là domain của mình
 				.issueTime(new Date())																//Thời gian cấp, lấy thời gian hiện tại
-				.expirationTime(new Date(Instant.now()
-				.plus(1, ChronoUnit.HOURS)
-				.toEpochMilli()))																	//Thời gian hết hạn tocken sau 1h
+				.expirationTime(new Date(Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()))	//Thời gian hết hạn tocken sau 1h
+				.jwtID(UUID.randomUUID().toString())												//Đặt ID cho token											
 				.claim("scope", getUserRolesAndPermissions(user))
 				.build();		
 		Payload payload = new Payload(jwtClaimSet.toJSONObject());
@@ -99,33 +150,6 @@ public class AuthenticationService {
 		}										
 	}
 	/* -------------------------------------------------------- */
-	public IntrospectRestponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
-		var token = request.getToken();
-		JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
-		SignedJWT signedJWT = SignedJWT.parse(token);
-		boolean /*var*/ verified = signedJWT.verify(verifier);
-		
-		Date expityTime =  signedJWT.getJWTClaimsSet().getExpirationTime();
-		
-		return IntrospectRestponse.builder()
-			.valid(verified && expityTime.after(new Date()))
-			.build();
-	}
-	/* -------------------------------------------------------- */
-	/*
-	private String buidScope(User user) {
-		StringJoiner stringJoiner = new StringJoiner(" ");
-		if(!CollectionUtils.isEmpty(user.getRoles())) {
-			user.getRoles().forEach(role -> {
-				stringJoiner.add(role.getName());
-				if(!CollectionUtils.isEmpty(role.getPermissions())) {
-					role.getPermissions().forEach(permission -> {stringJoiner.add(permission.getName()); });
-				}
-			});
-		}
-		return stringJoiner.toString();
-	} */
-	/* -------------------------------------------------------- */
 	private String getUserRolesAndPermissions(User user) {
 	    return Optional.ofNullable(user.getRoles())		//Tránh lỗi NullPointerException 
 	            .orElse(Collections.emptySet())			//nếu user.getRoles() là null trả về tập rỗng
@@ -135,6 +159,5 @@ public class AuthenticationService {
                    Optional.ofNullable(role.getPermissions()).orElse(Collections.emptySet()).stream().map(Permission::getName)))
 	            .collect(Collectors.joining(" ")); 
 	}
-	
 	/* -------------------------------------------------------- */
 }

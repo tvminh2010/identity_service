@@ -1,21 +1,18 @@
 package zve.com.vn.controller;
 
 import java.text.ParseException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.nimbusds.jose.JOSEException;
-
 import zve.com.vn.dto.request.AuthenticationRequest;
 import zve.com.vn.dto.request.IntrospectRequest;
+import zve.com.vn.dto.request.LogoutRequest;
 import zve.com.vn.dto.response.ApiResponse;
 import zve.com.vn.dto.response.AuthenticationRestponse;
 import zve.com.vn.dto.response.IntrospectRestponse;
-import zve.com.vn.enums.ErrorCode;
 import zve.com.vn.service.AuthenticationService;
 
 @RestController
@@ -26,25 +23,6 @@ public class AuthenticationController {
 	AuthenticationService authenticationService;
 	
 	/* ------------------------------------------------------------------------------- */
-	@PostMapping("/log-in2")
-	ApiResponse<AuthenticationRestponse> authenticate(@RequestBody AuthenticationRequest request) {
-		ApiResponse<AuthenticationRestponse> apiResponse = new ApiResponse<AuthenticationRestponse>();
-		boolean result = authenticationService.authenticate(request);
-		
-		AuthenticationRestponse authenticationResponse = new AuthenticationRestponse();
-		authenticationResponse.setAuthenticated(result);
-		authenticationResponse.setToken("Token String demo here");
-		
-		if(result) {
-			apiResponse.setCode(ErrorCode.USER_AUTHENTICATED.getCode());
-			apiResponse.setResult(authenticationResponse);
-		} else {
-			apiResponse.setCode(ErrorCode.UN_AUTHENTICATED.getCode());
-			apiResponse.setResult(authenticationResponse);
-		}
-		return apiResponse;		
-	}
-	/* ------------------------------------------------------------------------------- */
 	@PostMapping("/log-in")
 	ApiResponse<AuthenticationRestponse> authenticateJwt(@RequestBody AuthenticationRequest request) {
 		ApiResponse<AuthenticationRestponse> apiResponse = new ApiResponse<AuthenticationRestponse>();
@@ -53,10 +31,26 @@ public class AuthenticationController {
 		return apiResponse;
 	}
 	/* ------------------------------------------------------------------------------- */
+	@PostMapping("/logout")
+	ApiResponse<String> logoutJwt (@RequestBody LogoutRequest request) throws JOSEException, ParseException {
+		authenticationService.logout(request);
+		ApiResponse<String> apiResponse = new ApiResponse<String>();
+		apiResponse.setResult("Logout successfully!");
+		return apiResponse;
+	}
+	/* ------------------------------------------------------------------------------- */
 	@PostMapping("/introspect")
 	ApiResponse<IntrospectRestponse> introspect(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
 		var result = authenticationService.introspect(request);
 		
+		ApiResponse<IntrospectRestponse> apiResponse = new ApiResponse<IntrospectRestponse>();
+		apiResponse.setResult(result);
+		return apiResponse;
+	}
+	/* ------------------------------------------------------------------------------- */
+	@PostMapping("/validatetoken")
+	ApiResponse<IntrospectRestponse> introspect2(@RequestBody IntrospectRequest request) throws JOSEException, ParseException {
+		var result = authenticationService.introspect2(request);
 		ApiResponse<IntrospectRestponse> apiResponse = new ApiResponse<IntrospectRestponse>();
 		apiResponse.setResult(result);
 		return apiResponse;
