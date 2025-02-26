@@ -12,6 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class LogoutRequest {
-	
-	private String token;
+
+  private String token;
 }

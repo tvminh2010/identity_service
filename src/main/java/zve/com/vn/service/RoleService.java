@@ -20,64 +20,55 @@ import zve.com.vn.repository.RoleRepository;
 
 @Service
 public class RoleService {
-	
-	@Autowired
-	RoleRepository roleRepository;
-	
-	@Autowired
-	PermissionRepository permissionRepository;
-	
-	@Autowired
-	RoleMapper roleMapper;
-	
-	/* ------------------------------------------------------------------ */
-	public RoleResponse createRole(RoleRequest request) {
-		Role role = roleMapper.toRole(request);
-		List<Permission> permissions = permissionRepository.findAllById(request.getPermissions());
-		role.setPermissions(new HashSet<>(permissions));
-		return roleMapper.toRoleResponse(roleRepository.save(role));
-	}
-	/* ------------------------------------------------------------------ */
-	public List<RoleResponse> getAllRoles() {
-		//List<RoleResponse> result =  new ArrayList<RoleResponse>();
-		Sort sort = Sort.by(Sort.Direction.ASC, "name");
-		/*
-		for(Role role: roleRepository.findAll(sort)) {
-			result.add(roleMapper.toRoleResponse(role));
-		}*/
-		//return result;
-		return roleRepository.findAll(sort)
-				.stream()
-				.map(roleMapper::toRoleResponse)
-				.toList();
-		
-	}
-	/* ------------------------------------------------------------------ */
-	public RoleResponse getRoleById(String roleId) {
-		return roleMapper.toRoleResponse(roleRepository.findById(roleId)
-				.orElseThrow(() -> new RuntimeException("Role ko tồn tại")))  ;
-	}
-	/* ------------------------------------------------------------------ */
-	public void deleteRole(String roleId) {
-		Optional<Role> optRole = roleRepository.findById(roleId);
-		if(!optRole.isPresent()) {
-			throw new CustomAppException(ErrorCode.ROLE_NOT_FOUND);
-		} else {
-			roleRepository.deleteById(roleId);
-		}
-	}
-	/* ------------------------------------------------------------------ */
-	public RoleResponse updateRole (String roleId, RoleRequest request) {
-		Optional<Role> optRole = roleRepository.findById(roleId);
-		if(!optRole.isPresent()) {
-			throw new CustomAppException(ErrorCode.ROLE_NOT_FOUND);
-		} else {
-			Role role = roleMapper.toRole(request);
-			List<Permission> permissions = permissionRepository.findAllById(request.getPermissions());
-			role.setPermissions(new HashSet<>(permissions));
-			
-			return roleMapper.toRoleResponse(roleRepository.save(role));
-		}
-	}
-	/* ------------------------------------------------------------------ */
+
+  @Autowired RoleRepository roleRepository;
+
+  @Autowired PermissionRepository permissionRepository;
+
+  @Autowired RoleMapper roleMapper;
+
+  /* ------------------------------------------------------------------ */
+  public RoleResponse createRole(RoleRequest request) {
+    Role role = roleMapper.toRole(request);
+    List<Permission> permissions = permissionRepository.findAllById(request.getPermissions());
+    role.setPermissions(new HashSet<>(permissions));
+    return roleMapper.toRoleResponse(roleRepository.save(role));
+  }
+
+  /* ------------------------------------------------------------------ */
+  public List<RoleResponse> getAllRoles() {
+    Sort sort = Sort.by(Sort.Direction.ASC, "name");
+    return roleRepository.findAll(sort).stream().map(roleMapper::toRoleResponse).toList();
+  }
+
+  /* ------------------------------------------------------------------ */
+  public RoleResponse getRoleById(String roleId) {
+    return roleMapper.toRoleResponse(
+        roleRepository.findById(roleId).orElseThrow(() -> new RuntimeException("Role ko tồn tại")));
+  }
+
+  /* ------------------------------------------------------------------ */
+  public void deleteRole(String roleId) {
+    Optional<Role> optRole = roleRepository.findById(roleId);
+    if (!optRole.isPresent()) {
+      throw new CustomAppException(ErrorCode.ROLE_NOT_FOUND);
+    } else {
+      roleRepository.deleteById(roleId);
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  public RoleResponse updateRole(String roleId, RoleRequest request) {
+    Optional<Role> optRole = roleRepository.findById(roleId);
+    if (!optRole.isPresent()) {
+      throw new CustomAppException(ErrorCode.ROLE_NOT_FOUND);
+    } else {
+      Role role = roleMapper.toRole(request);
+      List<Permission> permissions = permissionRepository.findAllById(request.getPermissions());
+      role.setPermissions(new HashSet<>(permissions));
+
+      return roleMapper.toRoleResponse(roleRepository.save(role));
+    }
+  }
+  /* ------------------------------------------------------------------ */
 }

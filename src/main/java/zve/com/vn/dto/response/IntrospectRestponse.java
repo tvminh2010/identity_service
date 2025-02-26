@@ -12,6 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class IntrospectRestponse {
-	
-	private boolean valid;
+
+  private boolean valid;
 }

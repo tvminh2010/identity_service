@@ -1,16 +1,17 @@
-package zve.com.vn.dto.response;
+package zve.com.vn.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AuthenticationRestponse {
+public class RefreshRequest {
 
-  private boolean authenticated;
   private String token;
 }

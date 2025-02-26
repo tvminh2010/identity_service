@@ -12,6 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class IntrospectRequest {
-	
-	private String token;
+
+  private String token;
 }

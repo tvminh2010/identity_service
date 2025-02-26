@@ -21,56 +21,60 @@ import zve.com.vn.service.PermissionService;
 @RestController
 @RequestMapping("/permissions")
 public class PermissionController {
-	/* ------------------------------------------------------------------ */
-	@Autowired
-	private PermissionService permissionService;
-	
-	/* ------------------------------------------------------------------ */
-	@PostMapping
-	public ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest request) {
-		ApiResponse<PermissionResponse> apiResponse = new ApiResponse<PermissionResponse>();
-		apiResponse.setResult(permissionService.createPermission(request));
-		
-		return apiResponse;
-	}
-	/* ------------------------------------------------------------------ */
-	@GetMapping
-	public ApiResponse<List<PermissionResponse>> getPermissionses() {
-		ApiResponse<List<PermissionResponse>> apiResponse = new ApiResponse<List<PermissionResponse>>();
-		apiResponse.setResult(permissionService.getAllPermissions());
-		return apiResponse;
-	}
-	/* ------------------------------------------------------------------ */
-	
-	@GetMapping("/{permissionId}")
-	public ApiResponse<?> getPermissionById(@PathVariable("permissionId") String permissionId) {
-		ApiResponse<PermissionResponse> apiResponse = new ApiResponse<PermissionResponse>();
-		apiResponse.setResult(permissionService.getPermissionById(permissionId));
-		return apiResponse;
-	}
-	/* ------------------------------------------------------------------ */
-	@GetMapping("/search")
-	public ApiResponse<List<PermissionResponse>> searchPermission(@RequestParam(name = "keyword", required = false, defaultValue= "") String keyword) {
-		
-		ApiResponse<List<PermissionResponse>> apiResponse = new ApiResponse<List<PermissionResponse>>();
-		apiResponse.setResult(permissionService.searchPermissions(keyword));
-		//List<PermissionResponse> permissions = permissionService.searchPermissions(keyword);
-		//return ResponseEntity.ok(permissions);
-		return apiResponse;
-	}
-	/* ------------------------------------------------------------------ */
-	@PutMapping("/{permissionId}")
-	public ApiResponse<PermissionResponse> updatePermission (@PathVariable("permissionId") String permissionId,  
-										@RequestBody PermissionRequest req) {
-		ApiResponse<PermissionResponse> apiResponse = new ApiResponse<PermissionResponse>();
-		apiResponse.setResult(permissionService.updatePermission(permissionId, req));
-		return apiResponse;
-	}
-	/* ------------------------------------------------------------------ */
-	@DeleteMapping("/{permissionId}")
-	public String deletePermissionById(@PathVariable("permissionId") String permissionId) {
-		permissionService.deletePermission(permissionId);
-		return "Permission: "+ permissionId + " have been deleted";
-	}
-	/* ------------------------------------------------------------------ */
+  /* ------------------------------------------------------------------ */
+  @Autowired private PermissionService permissionService;
+
+  /* ------------------------------------------------------------------ */
+  @PostMapping
+  public ApiResponse<PermissionResponse> createPermission(@RequestBody PermissionRequest request) {
+    ApiResponse<PermissionResponse> apiResponse = new ApiResponse<>();
+    apiResponse.setResult(permissionService.createPermission(request));
+
+    return apiResponse;
+  }
+
+  /* ------------------------------------------------------------------ */
+  @GetMapping
+  public ApiResponse<List<PermissionResponse>> getPermissionses() {
+    ApiResponse<List<PermissionResponse>> apiResponse = new ApiResponse<>();
+    apiResponse.setResult(permissionService.getAllPermissions());
+    return apiResponse;
+  }
+
+  /* ------------------------------------------------------------------ */
+
+  @GetMapping("/{permissionId}")
+  public ApiResponse<PermissionResponse> getPermissionById(
+      @PathVariable("permissionId") String permissionId) {
+    ApiResponse<PermissionResponse> apiResponse = new ApiResponse<>();
+    apiResponse.setResult(permissionService.getPermissionById(permissionId));
+    return apiResponse;
+  }
+
+  /* ------------------------------------------------------------------ */
+  @GetMapping("/search")
+  public ApiResponse<List<PermissionResponse>> searchPermission(
+      @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword) {
+
+    ApiResponse<List<PermissionResponse>> apiResponse = new ApiResponse<>();
+    apiResponse.setResult(permissionService.searchPermissions(keyword));
+    return apiResponse;
+  }
+
+  /* ------------------------------------------------------------------ */
+  @PutMapping("/{permissionId}")
+  public ApiResponse<PermissionResponse> updatePermission(
+      @PathVariable("permissionId") String permissionId, @RequestBody PermissionRequest req) {
+    ApiResponse<PermissionResponse> apiResponse = new ApiResponse<>();
+    apiResponse.setResult(permissionService.updatePermission(permissionId, req));
+    return apiResponse;
+  }
+
+  /* ------------------------------------------------------------------ */
+  @DeleteMapping("/{permissionId}")
+  public String deletePermissionById(@PathVariable("permissionId") String permissionId) {
+    permissionService.deletePermission(permissionId);
+    return "Permission: " + permissionId + " have been deleted";
+  }
+  /* ------------------------------------------------------------------ */
 }

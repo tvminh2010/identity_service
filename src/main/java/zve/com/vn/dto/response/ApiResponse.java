@@ -8,8 +8,8 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
-public class ApiResponse <Thongtin> {
-	private int code;
-	private String message;
-	private Thongtin result;
+public class ApiResponse<T> {
+  private int code;
+  private String message;
+  private T result;
 }

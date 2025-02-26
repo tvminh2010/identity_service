@@ -1,2 +1,9 @@
 jwt:
- signerKey: "YvAD7YK1Xx+EitDRWO6lwao4SMtLuFaQamhBNXniy7c3PAbgpXo0BgVDBakWnABZ"
+  signerKey: "YvAD7YK1Xx+EitDRWO6lwao4SMtLuFaQamhBNXniy7c3PAbgpXo0BgVDBakWnABZ"
+  valid-duration: 3600            #in seconds
+  refreshable-duration: 360000    #in seconds
+ 
+admin:
+  default-password: Tvminh.2026
+ho:
+  ten: Trinh Van Minh

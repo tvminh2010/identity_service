@@ -6,16 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class WebController {
-	
-	/* -------------------------------------------------------------- */
-	@GetMapping("/")
-	public String index() {
-		return "index";
-	}
-	/* -------------------------------------------------------------- */
-	@RequestMapping("/home")
-	public String home() {
-		return "home";
-	}
-	/* -------------------------------------------------------------- */
+
+  /* -------------------------------------------------------------- */
+  @GetMapping("/")
+  public String index() {
+    return "index";
+  }
+
+  /* -------------------------------------------------------------- */
+  @RequestMapping("/home")
+  public String home() {
+    return "home";
+  }
+  /* -------------------------------------------------------------- */
 }
