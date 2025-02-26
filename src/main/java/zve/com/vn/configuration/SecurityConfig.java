@@ -1,5 +1,7 @@
 package zve.com.vn.configuration;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration // Annotation dùng để tạo bean cho các method của class này, Class này cũng là 1 bean
 @EnableWebSecurity // Mặc định đã enable rồi, nên có thể có hoặc ko annotation này
@@ -89,6 +94,21 @@ public class SecurityConfig {
   PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder(12);
   }
-  /* --------------------------------------------------------------------- */
 
+  /* --------------------------------------------------------------------- */
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(
+        List.of("http://localhost:3000", "https://localhost:4200")); // Chỉ định origin
+    configuration.setAllowedMethods(
+        List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Phương thức HTTP cho phép
+    configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Header cho phép
+    configuration.setAllowCredentials(true); // Cho phép gửi cookie hoặc thông tin xác thực
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration); // Áp dụng cho tất cả endpoint
+    return source;
+  }
+  /* --------------------------------------------------------------------- */
 }
