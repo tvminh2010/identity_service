@@ -35,7 +35,7 @@ public class SecurityConfig {
   };
 
   private static final String[] GET_PUBLIC_ENDPOINTS = {
-    "/home", "/", "/swagger-ui/**", "/actuator/**"
+    "/home", "/", "/swagger-ui/**", "/actuator/**", "/print"
   };
 
   private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -96,11 +96,12 @@ public class SecurityConfig {
   }
 
   /* --------------------------------------------------------------------- */
+  /*
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(
-        List.of("http://localhost:3000", "https://localhost:4200")); // Chỉ định origin
+        List.of("http://localhost:3000", "https://localhost:4200", "https://localhost:8080")); // Chỉ định origin
     configuration.setAllowedMethods(
         List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Phương thức HTTP cho phép
     configuration.setAllowedHeaders(List.of("Authorization", "Content-Type")); // Header cho phép
@@ -109,6 +110,6 @@ public class SecurityConfig {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration); // Áp dụng cho tất cả endpoint
     return source;
-  }
+  }*/
   /* --------------------------------------------------------------------- */
 }

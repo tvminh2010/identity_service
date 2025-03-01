@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R0004_LoadingCharge" language="groovy" pageWidth="800" pageHeight="842" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="whCode" class="java.lang.String"/>
+	<parameter name="customerCode" class="java.lang.String"/>
+	<parameter name="fromDate" class="java.util.Date"/>
+	<parameter name="toDate" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[$!{sqlQuery}]]>
+	</queryString>
+	<field name="ngay" class="java.lang.String"/>
+	<field name="so_phieu" class="java.lang.String"/>
+	<field name="bien_so" class="java.lang.String"/>
+	<field name="trong_tai" class="java.math.BigDecimal"/>
+	<field name="tong_so" class="java.math.BigDecimal"/>
+	<field name="m3" class="java.math.BigDecimal"/>
+	<field name="dai_ly" class="java.lang.String"/>
+	<variable name="SUM_TONG_SO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{#plain('tong_so')}]]></variableExpression>
+	</variable>
+	<variable name="SUM_M3" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{#plain('m3')}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[ngay]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="59" width="162" height="20"/>
+				<textElement/>
+				<text><![CDATA[so_phieu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="262" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[bien_so]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[trong_tai]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="462" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[tong_so]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="562" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[m3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="662" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[dai_ly]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="66" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('ngay')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="162" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('so_phieu')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="262" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('bien_so')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{#plain('trong_tai')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{#plain('tong_so')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="562" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{#plain('m3')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="662" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('dai_ly')}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="462" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{#plain('SUM_TONG_SO')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="562" y="0" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{#plain('SUM_M3')}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

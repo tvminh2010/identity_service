@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import zve.com.vn.dto.mapper.UserMapper;
@@ -57,7 +58,25 @@ public class UserService {
 
     return userMapper.toUserResponse(userRepository.save(user));
   }
+  /* ------------------------------------------------------------------ */
+  public UserResponse updateUser(String userId, UserUpdateRequest request) {
+	    User existingUser =
+	        userRepository
+	            .findById(userId)
+	            .orElseThrow(() -> new CustomAppException(ErrorCode.USER_NOT_FOUND));
 
+	    userMapper.updateUserFromDto(request, existingUser);
+
+	    if (StringUtils.hasText(request.getPassword())) {
+	        existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
+	    }
+	    
+	    if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+	      Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
+	      existingUser.setRoles(roles);
+	    }
+	    return userMapper.toUserResponse(userRepository.save(existingUser));
+	  }
   /* ------------------------------------------------------------------ */
   // @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
   @PreAuthorize("hasRole('ADMIN')")
@@ -86,25 +105,7 @@ public class UserService {
   }
 
   /* ------------------------------------------------------------------ */
-  public UserResponse updateUser(String userId, UserUpdateRequest request) {
-    User existingUser =
-        userRepository
-            .findById(userId)
-            .orElseThrow(() -> new CustomAppException(ErrorCode.USER_NOT_FOUND));
-
-    userMapper.updateUser(existingUser, request);
-
-    if (request.getPassword() != null && !request.getPassword().isEmpty()) {
-      existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
-    }
-    if (request.getRoles() != null && !request.getRoles().isEmpty()) {
-      Set<Role> roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
-      existingUser.setRoles(roles);
-    }
-    return userMapper.toUserResponse(userRepository.save(existingUser));
-  }
-
-  /* ------------------------------------------------------------------ */
+  
   public void deleteUser(String userId) {
     if (!userRepository.existsById(userId)) {
       throw new CustomAppException(ErrorCode.USER_NOT_FOUND);

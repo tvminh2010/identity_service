@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report7" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString><![CDATA[
+		
+			SELECT product_no #foreach ($dealer in $dealerList) ,COALESCE("#makeFieldName($dealer.customer_code)", 0) AS "#makeFieldName($dealer.customer_code)" #end
+	      FROM crosstab ('$!{sqlQuery}', 'SELECT (ARRAY[
+	    #set($i = 0) #foreach ($dealer in $dealerList) #if ($i != 0) , #end ''$dealer.customer_code'' #set($i = $i + 1) #end
+	    ])[i]
+	      FROM generate_series(array_lower(ARRAY[
+	    #set($i = 0) #foreach ($dealer in $dealerList) #if ($i != 0) , #end ''$dealer.customer_code'' #set($i = $i + 1) #end
+	    ], 1), array_upper(ARRAY[
+	    #set($i = 0) #foreach ($dealer in $dealerList) #if ($i != 0) , #end ''$dealer.customer_code'' #set($i = $i + 1) #end
+	    ], 1)) i;
+	      ')
+	        AS (product_no VARCHAR #foreach ($dealer in $dealerList) ,"#makeFieldName($dealer.customer_code)" NUMERIC #end )
+	    
+	]]></queryString>
+	<field name="product_no" class="java.lang.String"/>
+	#foreach ($dealer in $dealerList)
+	<field name="#makeFieldName($dealer.customer_code)" class="java.math.BigDecimal"/>
+	#end
+	<variable name="dealerLeftQty" class="java.math.BigDecimal" resetType="None">
+		<variableExpression><![CDATA[
+		0
+		#foreach ($dealer in $dealerList)
+		+ $F{#makeFieldName($dealer.customer_code)}
+		#end
+		]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	#foreach ($dealer in $dealerList)
+	<variable name="SUM_#makeFieldName($dealer.customer_code)" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{#makeFieldName($dealer.customer_code)}]]></variableExpression>
+	</variable>
+	#end
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="144" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="0" width="400" height="46"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				
+				<text><![CDATA[TỒN LỆNH THEO ĐẠI LÝ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="57" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="57" width="300" height="20"/>
+				<textElement/>
+				<text><![CDATA[$whCode]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="77" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nguoi bao cao]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="77" width="300" height="20"/>
+				<textElement/>
+				<text><![CDATA[$userSession.fullName]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="97" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[$today]]></text>
+			</staticText>
+			
+			<staticText>
+				<reportElement x="0" y="117" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ma hang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="117" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sum]]></text>
+			</staticText>
+			#set($i = 0) #foreach ($dealer in $dealerList) #set ($x = $i * 100 + 200)
+			<staticText>
+				<reportElement x="${x}" y="117" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[$dealer.customer_code]]></text>
+			</staticText>
+			#set($i = $i + 1) #end
+		</band>
+	</title>
+	<pageHeader />
+	<columnHeader />
+	<detail>
+		<band height="22" splitType="Stretch">
+			#set($col = '$F{product_no}')
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$col]]></textFieldExpression>
+			</textField>
+			#set($col = '$V{dealerLeftQty}')
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20">				
+				</reportElement>
+				<textElement textAlignment="Right">
+				 	#if ($col != 0)
+					<font isBold="true"/>
+					#end
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal">
+					<![CDATA[$col]]>
+				</textFieldExpression>
+			</textField>
+			#set($i = 0) #foreach ($dealer in $dealerList) #set ($x = $i * 100 + 200)
+			<textField>
+				<reportElement x="${x}" y="0" width="100" height="20">
+					<printWhenExpression><![CDATA[$F{#makeFieldName($dealer.customer_code)}>0?Boolean.TRUE:Boolean.FALSE]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">					
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{#makeFieldName($dealer.customer_code)}]]></textFieldExpression>
+			</textField>
+			
+			#set($i = $i + 1) #end
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			#set($i = 0) #foreach ($dealer in $dealerList) #set ($x = $i * 100 + 200)
+			<textField>
+				<reportElement x="${x}" y="0" width="100" height="20">
+				
+				</reportElement>
+				
+				
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				
+				 
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{#plain('SUM_')#makeFieldName($dealer.customer_code)}]]></textFieldExpression>
+				 
+			</textField>
+			
+			#set($i = $i + 1) #end
+		</band>
+	</summary>
+</jasperReport>

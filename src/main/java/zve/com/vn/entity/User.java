@@ -52,5 +52,5 @@ public class User implements Serializable {
 
   LocalDate dob;
 
-  transient @ManyToMany(fetch = FetchType.EAGER) @JsonIgnore Set<Role> roles;
+  @ManyToMany @JsonIgnore Set<Role> roles;
 }

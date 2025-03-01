@@ -1,0 +1,16 @@
+<html>
+    <body>
+        Hi ,
+		<br/><br/>
+		This is reject mail for transport order:
+        <br/>
+        #msg("text.ob04.transport_order_no"): $!{data.transport_order_no}
+        <br/>
+        #msg("text.ob04.warehouse"): $!{data.wh_code}
+        <br/>
+        #msg("text.ob04.customer"): $!{data.customer_code}
+        <br/>
+		Sender: $!{data.user.fullName}
+
+    </body>
+</html>

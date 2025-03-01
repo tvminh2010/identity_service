@@ -34,5 +34,5 @@ public class Role implements Serializable {
 
   String description;
 
-  transient @ManyToMany @JsonIgnore Set<Permission> permissions;
+  @ManyToMany @JsonIgnore Set<Permission> permissions;
 }

@@ -1,0 +1,74 @@
+<html>
+    <body>
+        Hi ,
+		<br/><br/>
+		This is reject mail for transport request:
+        <br/>
+        #msg("text.ob04.transport_request_no"): $!{data.transport_request_no}
+        <br/>
+        #msg("text.common.warehouse"): $!{data.wh_code}
+        <br/>
+        #msg("text.common.customer"): $!{data.customer_code}
+        <br/>
+		Sender: $!{data.user.fullName}
+        <br/> <br/>
+
+            <span style="color: #585858; font-weight: bold">#msg("text.ob04.master")</span> <br/>
+			<table cellpadding="3" style="width: 80%; border-collapse: collapse;">
+				<tr>
+					<td width="20%" style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.warehouse") </td>
+					<td width="30%" style="border: 1px solid #CCCCCC"> $!{data.wh_code} </td>
+					<td width="20%" style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.customer") </td>
+					<td width="30%" style="border: 1px solid #CCCCCC"> $!{data.customer_code} </td>
+				</tr>
+				<tr>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.transport_order_no")</td>
+					<td style="border: 1px solid #CCCCCC">$!{data.transport_order_no}</td>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.transport_request_no") </td>
+					<td style="border: 1px solid #CCCCCC"> $!{data.transport_request_no} </td>
+				</tr>
+				<tr>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.truck_plate")</td>
+					<td colspan="3" style="border: 1px solid #CCCCCC">$!{data.truck_plate}</td>
+				</tr>
+				<tr>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.driver_1")</td>
+					<td style="border: 1px solid #CCCCCC">$!{data.driver_name}</td>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.driver_2")</td>
+					<td style="border: 1px solid #CCCCCC">$!{data.driver_name_2}</td>
+				</tr>
+				<tr>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.issue_date")</td>
+					<td style="border: 1px solid #CCCCCC"> $!{data.issue_date} </td>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.return_date")</td>
+					<td style="border: 1px solid #CCCCCC"> $!{data.return_date} </td>
+				</tr>
+			</table><br/>
+
+            <span style="color: #585858; font-weight: bold">#msg("text.ob04.detail")</span><br/>
+			<table cellpadding="3" style="width: 80%; border-collapse: collapse;">
+				<tr>
+					<td width="20%" style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.km_start")</td>
+					<td width="30%" style="border: 1px solid #CCCCCC">$!{data.kmStart}</td>
+					<td width="20%" style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.km_end")</td>
+					<td width="30%" style="border: 1px solid #CCCCCC">$!{data.kmEnd}</td>
+				</tr>
+				<tr>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.common.distance")</td>
+					<td style="border: 1px solid #CCCCCC">$!{data.distance}</td>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.route_code") </td>
+					<td style="border: 1px solid #CCCCCC">$!{data.routeCode}</td>
+				</tr>
+				<tr>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.driver_accessories") </td>
+					<td colspan="3" style="border: 1px solid #CCCCCC">$!{data.driverAccessories}</td>
+				</tr>
+				<tr>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.operator") </td>
+					<td style="border: 1px solid #CCCCCC">$!{data.operator}</td>
+					<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">#msg("text.ob04.approver") </td>
+					<td style="border: 1px solid #CCCCCC">$!{data.approver}</td>
+				</tr>
+			</table>
+    </body>
+</html>

@@ -1,0 +1,24 @@
+<html>
+    <body>
+        $!{data.hi} ,
+		<br/><br/>
+		$!{data.header}
+        <br/>
+        
+		<table cellpadding="3" style="width: 80%; border-collapse: collapse;">
+			<tr>
+				<td width="20%" style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">$!{data.wh_label} </td>
+				<td width="30%" style="border: 1px solid #CCCCCC"> $!{data.wh_code} </td>
+				<td width="20%" style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">$!{data.customer_label} </td>
+				<td width="30%" style="border: 1px solid #CCCCCC"> $!{data.customer_code} </td>
+			</tr>
+			<tr>
+				<td style="background: #F0EEEE; font-weight: bold; border: 1px solid #CCCCCC">$!{data.trans_req_label}</td>
+				<td style="border: 1px solid #CCCCCC" colspan="3">$!{data.trans_req_no}</td>
+			</tr>
+		</table>
+		
+		<br/>
+			
+    </body>
+</html>

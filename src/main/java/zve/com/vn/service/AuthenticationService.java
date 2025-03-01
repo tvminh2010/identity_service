@@ -10,12 +10,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.transaction.Transactional;
-
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +27,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import zve.com.vn.dto.request.AuthenticationRequest;
 import zve.com.vn.dto.request.IntrospectRequest;
@@ -229,7 +227,7 @@ public class AuthenticationService {
   /* -------------------------------------------------------- */
   // @Scheduled(cron = "0 0 0 * * ?") 				// Chạy vào 0h mỗi ngày
   // @Scheduled(cron = "0 0 * * * ?") 				// Chạy mỗi giờ
-  @Scheduled(fixedRate = 60000) // Chạy mỗi 60 giây
+  //@Scheduled(fixedRate = 60000) // Chạy mỗi 60 giây
   @Transactional
   public void cleanExpiredTokens() {
     invalidateRepository.deleteByExpireTimeBefore(new Date());

@@ -1,0 +1,6 @@
+#macro(msg $code)
+	$resources.getMessage($code, null, $data.locale)
+#end
+
+#macro(makeFieldName $string)#set ($s = $string.replaceAll("[^a-zA-Z0-9]", "_"))#set ($s = $s.toLowerCase())${s}#end
+#macro(plain $string)${string}#end

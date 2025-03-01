@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R0002_StockOut" language="groovy" pageWidth="1700" pageHeight="842" columnWidth="1660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="whCode" class="java.lang.String"/>
+	<parameter name="customerCode" class="java.lang.String"/>
+	<parameter name="fromDate" class="java.util.Date"/>
+	<parameter name="toDate" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[$!{sqlQuery}]]>
+	</queryString>
+	<field name="ngay_xuat" class="java.lang.String"/>
+	<field name="so_lenh" class="java.lang.String"/>
+	<field name="so_phieu" class="java.lang.String"/>
+	<field name="so_xe" class="java.lang.String"/>
+	<field name="nha_van_chuyen" class="java.lang.String"/>
+	<field name="lai_xe" class="java.lang.String"/>
+	<field name="ma_hang" class="java.lang.String"/>
+	<field name="ten_hang" class="java.lang.String"/>
+	<field name="so_luong" class="java.math.BigDecimal"/>
+	<field name="kho" class="java.lang.String"/>
+	<field name="khach_hang" class="java.lang.String"/>
+	<field name="dai_ly" class="java.lang.String"/>
+	<field name="kho_dai_ly" class="java.lang.String"/>
+	<field name="noi_giao" class="java.lang.String"/>
+	<field name="lenh_cua" class="java.lang.String"/>
+	<field name="sub_inventory" class="java.lang.String"/>
+	<variable name="SUM" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{#plain('so_luong')}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[ngay_xuat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="103" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[so_lenh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[so_phieu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[so_xe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[nha_van_chuyen]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="503" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[lai_xe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="603" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[ma_hang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="703" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[ten_hang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="903" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[kho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="803" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[so_luong]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1103" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[khach_hang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1203" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[dai_ly]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1303" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[kho_dai_ly]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1403" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[noi_giao]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1503" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[lenh_cua]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1003" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[tinh_chat]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="3" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('ngay_xuat')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="103" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('so_lenh')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="203" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('so_phieu')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="303" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('so_xe')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="403" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('nha_van_chuyen')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="503" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('lai_xe')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="603" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('ma_hang')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="703" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('ten_hang')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="903" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('kho')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="803" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{#plain('so_luong')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="1102" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('khach_hang')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="1203" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('dai_ly')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="1303" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('kho_dai_ly')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="1403" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('noi_giao')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="1503" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('lenh_cua')}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="1003" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('sub_inventory')}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="803" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{#plain('SUM')}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

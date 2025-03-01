@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="R0016_DeliveryUsage" language="groovy" pageWidth="1500" pageHeight="595" orientation="Landscape" columnWidth="1460" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="517"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="whCode" class="java.lang.String"/>
+	<parameter name="customerCode" class="java.lang.String"/>
+	<parameter name="fromDate" class="java.util.Date"/>
+	<parameter name="toDate" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[$!{sqlQuery}]]>
+	</queryString>
+	<field name="wh_code" class="java.lang.String"/>
+	<field name="trans_req_no" class="java.lang.String"/>
+	<field name="trans_order_no" class="java.lang.String"/>
+	<field name="truck_plate" class="java.lang.String"/>
+	<field name="truck_supplier" class="java.lang.String"/>
+	<field name="requested_truck_type" class="java.lang.String"/>
+	<field name="issued_date" class="java.lang.String"/>
+	<field name="stock_out_no" class="java.lang.String"/>
+	<field name="etd" class="java.lang.String"/>
+	<field name="received_date" class="java.lang.String"/>
+	<field name="loading_contact_abbr" class="java.lang.String"/>
+	<field name="delivery_contact_abbr" class="java.lang.String"/>
+	<field name="number_delivery_contact_abbr" class="java.math.BigDecimal"/>
+	<field name="description" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="70" height="20"/>
+				<textElement/>
+				<text><![CDATA[Kho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Số yêu cầu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Số lệnh điều xe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="0" width="77" height="20"/>
+				<textElement/>
+				<text><![CDATA[Số xe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nhà vận tải]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="447" y="0" width="69" height="20"/>
+				<textElement/>
+				<text><![CDATA[Loại xe YC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="516" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ngày viết lệnh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="733" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ngày trả hàng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="833" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ngày trả CT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="933" y="0" width="133" height="20"/>
+				<textElement/>
+				<text><![CDATA[Điểm đóng hàng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1066" y="0" width="133" height="20"/>
+				<textElement/>
+				<text><![CDATA[Điểm trả hàng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="616" y="0" width="117" height="20"/>
+				<textElement/>
+				<text><![CDATA[Phiếu xuất]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1199" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Số điểm trả hàng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1299" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ghi chú]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="41" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="87" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="160" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="70" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('wh_code')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('trans_req_no')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="170" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('trans_order_no')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="0" width="77" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('truck_plate')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="347" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('truck_supplier')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="447" y="0" width="69" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('requested_truck_type')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="516" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('issued_date')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="616" y="0" width="117" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('stock_out_no')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="733" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('etd')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="833" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('received_date')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="933" y="0" width="133" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('loading_contact_abbr')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1066" y="0" width="133" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('delivery_contact_abbr')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1199" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{#plain('number_delivery_contact_abbr')}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1299" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{#plain('description')}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
