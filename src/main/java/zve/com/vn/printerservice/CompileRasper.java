@@ -9,16 +9,15 @@ import java.nio.file.StandardCopyOption;
 
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import net.sf.jasperreports.engine.JasperCompileManager;
 
 @Service
 public class CompileRasper {
 	
 	private static final String JRXML_PATH = "/reports/lg_label/lg_label.jrxml";
-    private static final String JASPER_OUTPUT = "target/classes/reports/lg_label.jasper";
+    private static final String JASPER_OUTPUT = "target/classes/reports/lg_label/lg_label.jasper";
 	/* ---------------------------------------------------------------- */
-	 @PostConstruct
+	 //@PostConstruct
 	    public void compileReport() {
 		 	
 	        try {

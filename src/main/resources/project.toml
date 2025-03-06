@@ -1,0 +1,3 @@
+[[build.env]]
+name = "BP_LINUX_ADDITIONAL_PREINSTALL_PACKAGES"
+value = "fontconfig ttf-dejavu ttf-liberation freetype"

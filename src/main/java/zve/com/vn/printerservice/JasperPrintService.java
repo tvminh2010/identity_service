@@ -27,7 +27,7 @@ public class JasperPrintService {
     @Value("${printer.name}")
     private String printerName;
 
-    private static final String JASPER_FILE_PATH = "reports/lg_label/lg_label.jasper";
+    private static final String JASPER_FILE_PATH = "reports/lg_label.jasper";
 
     /* ---------------------------------------------------------------- */
     public String printJasperReport() {
@@ -89,7 +89,7 @@ public class JasperPrintService {
     /* ---------------------------------------------------------------- */
     private Map<String, Object> getReportParameters() {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("title", "Báo cáo từ Spring Boot");
+        parameters.put("sub_title", "Báo cáo từ Spring Boot");
         return parameters;
     }
 
