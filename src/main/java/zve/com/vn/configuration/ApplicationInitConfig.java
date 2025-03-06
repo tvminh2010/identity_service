@@ -66,6 +66,10 @@ public class ApplicationInitConfig {
         log.warn(
             "Admin user have bean created with defaut password: ******* " + defaultAdminPassword);
       }
+      
+      
+      
+      
     };
   }
 

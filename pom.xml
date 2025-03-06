@@ -28,8 +28,9 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
-		 <org.mapstruct.version>1.6.3</org.mapstruct.version>
+		<org.mapstruct.version>1.6.3</org.mapstruct.version>   
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -152,6 +153,51 @@
 	        <artifactId>poi-ooxml</artifactId>
 	        <version>5.2.3</version>
     	</dependency>
+    	
+    	<!-- Jasper report -->
+    	
+    	<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports</artifactId>
+		    <version>7.0.1</version>
+		</dependency>
+		
+
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-barcode4j</artifactId>
+		    <version>7.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>net.sf.barcode4j</groupId>
+		    <artifactId>barcode4j</artifactId>
+		    <version>2.1</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-barbecue</artifactId>
+		    <version>7.0.1</version>
+		</dependency>
+		
+		<!-- 
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-functions</artifactId>
+		    <version>7.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-javaflow</artifactId>
+		    <version>7.0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-fonts</artifactId>
+		    <version>7.0.1</version>
+		</dependency>
+		-->
+    	<!-- End Jasper report -->
     	
 	</dependencies>
 
